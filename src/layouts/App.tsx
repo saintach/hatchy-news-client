@@ -2,10 +2,10 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import { Box, Flex  } from 'reflexbox';
 import '../assets/styles/App.css';
-import NewsReader from '../components/reader/NewsReader';
 import HeadlinesList from '../containers/headlines/HeadlinesList';
 import NavBar from '../containers/nav/NavBar';
 import SideBar from '../containers/nav/SideBar';
+import NewsReader from '../containers/reader/NewsReader';
 
 const Default = () => (
   <Flex>

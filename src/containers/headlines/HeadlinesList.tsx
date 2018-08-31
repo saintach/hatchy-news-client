@@ -1,8 +1,10 @@
-import { Spinner } from '@blueprintjs/core';
+// tslint:disable-next-line:no-var-requires
+const isEqual = require('lodash.isequal');
 import * as React from 'react';
 import { connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { AnyAction, bindActionCreators, compose, Dispatch } from 'redux';
+import { ISelectArticleUrl, selectArticleUrl } from '../../actions-reducers/selected';
 import { ILoadTopHeadlines, loadTopHeadlines } from '../../actions-reducers/topHeadlines';
 import HeadlineCard from '../../components/headlines/HeadlineCard';
 import { IArticle } from '../../types/IArticle';
@@ -12,6 +14,7 @@ interface ILocalProps {
   articles: IArticle[];
   loadTopHeadlines: ILoadTopHeadlines
   isFetching: boolean;
+  selectArticleUrl: ISelectArticleUrl;
 }
 
 class SideBar extends React.Component<ILocalProps, any> {
@@ -19,7 +22,7 @@ class SideBar extends React.Component<ILocalProps, any> {
     const { isFetching, articles } = this.props;
 
     if (isFetching) {
-      return <Spinner />
+      return <div>Loading...</div>
     }
 
     if (articles && articles.length) {
@@ -38,6 +41,12 @@ class SideBar extends React.Component<ILocalProps, any> {
       {name: 'country', value: 'us'}
     ]);
   }
+  public componentWillReceiveProps(nextProps: ILocalProps) {
+    if (!isEqual(nextProps.articles, this.props.articles) && nextProps.articles.length) {
+      // Select the first url
+      this.props.selectArticleUrl(nextProps.articles[0].url)
+    }
+  }
 }
 
 const mapStateToProps = (state: IState) => ({
@@ -47,7 +56,7 @@ const mapStateToProps = (state: IState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
     bindActionCreators(
-    { loadTopHeadlines },
+    { loadTopHeadlines, selectArticleUrl },
     dispatch,
 );
 

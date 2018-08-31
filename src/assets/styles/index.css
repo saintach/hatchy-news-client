@@ -8,6 +8,11 @@ body {
   text-align: left;
   box-shadow: none;
   border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.headline-card__container.selected {
+  background-color: #fafafa;
 }
 
 .news-reader__container {

@@ -8,6 +8,7 @@ import { ISelectArticleUrl, selectArticleUrl } from '../../actions-reducers/sele
 import { ILoadTopHeadlines, loadTopHeadlines } from '../../actions-reducers/topHeadlines';
 import HeadlineCard from '../../components/headlines/HeadlineCard';
 import { IArticle } from '../../types/IArticle';
+import { ISelected } from '../../types/ISelected';
 import { IState } from '../../types/IState';
 
 interface ILocalProps {
@@ -15,11 +16,16 @@ interface ILocalProps {
   loadTopHeadlines: ILoadTopHeadlines
   isFetching: boolean;
   selectArticleUrl: ISelectArticleUrl;
+  selected: ISelected;
 }
 
 class SideBar extends React.Component<ILocalProps, any> {
+  constructor(props: any) {
+    super(props);
+    this.onClickArticle = this.onClickArticle.bind(this);
+  }
   public render() {
-    const { isFetching, articles } = this.props;
+    const { isFetching, articles, selected } = this.props;
 
     if (isFetching) {
       return <div>Loading...</div>
@@ -27,7 +33,11 @@ class SideBar extends React.Component<ILocalProps, any> {
 
     if (articles && articles.length) {
       return articles.map((article, index) => (
-        <HeadlineCard key={index} {...article}/>
+        <HeadlineCard
+          key={index}
+          onClick={this.onClickArticle}
+          selected={article.url === selected.articleUrl}
+          {...article} />
       ))
     }
 
@@ -44,14 +54,18 @@ class SideBar extends React.Component<ILocalProps, any> {
   public componentWillReceiveProps(nextProps: ILocalProps) {
     if (!isEqual(nextProps.articles, this.props.articles) && nextProps.articles.length) {
       // Select the first url
-      this.props.selectArticleUrl(nextProps.articles[0].url)
+      this.props.selectArticleUrl(nextProps.articles[0].url);
     }
+  }
+  private onClickArticle(e: React.MouseEvent<HTMLElement>) {
+    this.props.selectArticleUrl(e.currentTarget.id);
   }
 }
 
 const mapStateToProps = (state: IState) => ({
   articles: state.topHeadlines.articles,
   isFetching: state.topHeadlines.isFetching,
+  selected: state.selected,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>

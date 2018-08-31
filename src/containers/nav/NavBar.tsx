@@ -15,16 +15,14 @@ import { IState } from "../../types/IState";
 class NavBar extends React.Component {
   public render() {
     return (
-      <div className="NavBar">
-        <Navbar>
-            <NavbarGroup>
-                <NavbarHeading>Hatchy News</NavbarHeading>
-                <NavbarDivider />
-                <Button className={Classes.MINIMAL} icon="home" text="Home" />
-                <Button className={Classes.MINIMAL} icon="log-in" text="Login" />
-            </NavbarGroup>
-        </Navbar>
-      </div>
+      <Navbar fixedToTop={true}>
+          <NavbarGroup>
+              <NavbarHeading>Hatchy News</NavbarHeading>
+              <NavbarDivider />
+              <Button className={Classes.MINIMAL} icon="user" text="Nova" />
+              <Button className={Classes.MINIMAL} icon="log-in" text="Login" />
+          </NavbarGroup>
+      </Navbar>
     );
   }
 }

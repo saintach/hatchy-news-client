@@ -6,7 +6,14 @@ import NavBar from '../containers/nav/NavBar';
 import SideBar from '../containers/nav/SideBar';
 
 const Default = () => (
-  <div>Home view: list of news + reader</div>
+  <Flex>
+    <Box w={2/5}>
+      List of News
+    </Box>
+    <Box>
+      Reader
+    </Box>
+  </Flex>
 )
 
 const Sources = () => (
@@ -18,15 +25,10 @@ class App extends React.Component {
     return (
       <div className="App">
         <NavBar />
-        <Flex align='center'>
-          <Box w={1/4}>
-            <SideBar />
-          </Box>
-          <Box px={2} >
-            <Route path="/" exact={true} component={Default} />
-            <Route path="/sources" exact={true} component={Sources} />
-          </Box>
-        </Flex>
+        <SideBar>
+          <Route path="/" exact={true} component={Default} />
+          <Route path="/sources" exact={true} component={Sources} />
+        </SideBar>
       </div>
     );
   }

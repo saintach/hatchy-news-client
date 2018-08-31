@@ -12,6 +12,13 @@ export type GET_EVERYTHING_REQUEST          = typeof GET_EVERYTHING_REQUEST;
 export type GET_EVERYTHING_SUCCESS          = typeof GET_EVERYTHING_SUCCESS;
 export type GET_EVERYTHING_FAILURE          = typeof GET_EVERYTHING_FAILURE;
 
+export const GET_SOURCES_REQUEST         = 'GET_SOURCES_REQUEST';
+export const GET_SOURCES_SUCCESS         = 'GET_SOURCES_SUCCESS';
+export const GET_SOURCES_FAILURE         = 'GET_SOURCES_FAILURE';
+export type GET_SOURCES_REQUEST          = typeof GET_SOURCES_REQUEST;
+export type GET_SOURCES_SUCCESS          = typeof GET_SOURCES_SUCCESS;
+export type GET_SOURCES_FAILURE          = typeof GET_SOURCES_FAILURE;
+
 export const SELECT_HEADLINE = 'SELECT_HEADLINE';
 export type SELECT_HEADLINE = typeof SELECT_HEADLINE;
 

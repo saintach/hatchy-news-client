@@ -6,6 +6,7 @@ import HeadlinesList from '../containers/headlines/HeadlinesList';
 import NavBar from '../containers/nav/NavBar';
 import SideBar from '../containers/nav/SideBar';
 import NewsReader from '../containers/reader/NewsReader';
+import SourcesList from '../containers/sources/SourcesList';
 
 const Default = () => (
   <Flex>
@@ -19,7 +20,7 @@ const Default = () => (
 )
 
 const Sources = () => (
-  <div>Sources view: list of sources</div>
+  <SourcesList />
 )
 
 class App extends React.Component {

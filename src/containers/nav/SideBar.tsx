@@ -37,9 +37,9 @@ class SideBar extends React.Component<ILocalProps, ILocalState> {
               <MenuItem id="top" text="Top" icon="star" active={selected.headlineType === 'top'} onClick={this.onMenuItemClick} />
               <MenuItem id="everything" text="Everything" icon="list-detail-view" active={selected.headlineType === 'everything'} onClick={this.onMenuItemClick} />
               <MenuItem id="yours" text="Yours" icon="book" active={selected.headlineType === 'yours'} onClick={this.onMenuItemClick} />
-              <MenuDivider title="Sources"/>
+              <MenuDivider title="Your Sources"/>
               <MenuItem text="TechCrunch" icon={<img height="16px" src="https://seeklogo.com/images/T/techcrunch-logo-5E626AD86C-seeklogo.com.gif"/>}/>
-              <MenuItem text="Add" icon="insert"/>
+              <MenuItem text="Add" icon="insert" href="/sources"/>
               <MenuDivider />
               <MenuItem icon="cog" text="Settings" />
               <MenuDivider />

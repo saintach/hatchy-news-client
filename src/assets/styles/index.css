@@ -15,6 +15,19 @@ body {
   background-color: #fafafa;
 }
 
+.source-card__container{
+  text-align: center;
+  cursor: pointer;
+}
+
+.source-card__container .desc {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  max-height: 4rem;
+}
+
 .news-reader__container {
   border-left: 1px solid #ddd;
   height: 100%;

@@ -1,4 +1,9 @@
 import { RouterState } from 'react-router-redux';
+import { IEverything } from './IEverything';
+import { ISources } from './ISources';
+import { ITopHeadlines } from './ITopHeadlines';
 export interface IState extends RouterState {
-  something: string;
+  sources: ISources;
+  topHeadlines: ITopHeadlines;
+  everything: IEverything;
 }

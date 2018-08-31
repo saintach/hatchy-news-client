@@ -30,7 +30,7 @@ class SideBar extends React.Component<any, ILocalState> {
               <MenuItem text="Everything" icon="list-detail-view"/>
               <MenuItem text="Yours" icon="book"/>
               <MenuDivider title="Sources"/>
-              <MenuItem text="TechCrunch" />
+              <MenuItem text="TechCrunch" icon={<img height="16px" src="https://seeklogo.com/images/T/techcrunch-logo-5E626AD86C-seeklogo.com.gif"/>}/>
               <MenuItem text="Add" icon="insert"/>
               <MenuDivider />
               <MenuItem icon="cog" text="Settings" />

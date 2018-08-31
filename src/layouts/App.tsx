@@ -2,16 +2,18 @@ import * as React from 'react';
 import { Route } from 'react-router-dom';
 import { Box, Flex  } from 'reflexbox';
 import '../assets/styles/App.css';
+import NewsReader from '../components/reader/NewsReader';
+import HeadlinesList from '../containers/headlines/HeadlinesList';
 import NavBar from '../containers/nav/NavBar';
 import SideBar from '../containers/nav/SideBar';
 
 const Default = () => (
   <Flex>
     <Box w={2/5}>
-      List of News
+      <HeadlinesList />
     </Box>
-    <Box>
-      Reader
+    <Box w={3/5}>
+      <NewsReader/>
     </Box>
   </Flex>
 )

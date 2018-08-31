@@ -3,3 +3,14 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
+
+.headline-card__container{
+  text-align: left;
+  box-shadow: none;
+  border-bottom: 1px solid #ddd;
+}
+
+.news-reader__container {
+  border-left: 1px solid #ddd;
+  height: 100%;
+}

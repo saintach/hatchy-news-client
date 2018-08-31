@@ -1,19 +1,32 @@
 import * as React from 'react';
+import { Route } from 'react-router-dom';
+import { Box, Flex  } from 'reflexbox';
 import '../assets/styles/App.css';
+import NavBar from '../containers/nav/NavBar';
+import SideBar from '../containers/nav/SideBar';
 
-import logo from '../assets/imgs/logo.svg';
+const Default = () => (
+  <div>Home view: list of news + reader</div>
+)
+
+const Sources = () => (
+  <div>Sources view: list of sources</div>
+)
 
 class App extends React.Component {
   public render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
-        </p>
+        <NavBar />
+        <Flex align='center'>
+          <Box w={1/4}>
+            <SideBar />
+          </Box>
+          <Box px={2} >
+            <Route path="/" exact={true} component={Default} />
+            <Route path="/sources" exact={true} component={Sources} />
+          </Box>
+        </Flex>
       </div>
     );
   }

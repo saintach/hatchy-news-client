@@ -64,8 +64,6 @@ class SideBar extends React.Component<ILocalProps, ILocalState> {
   }
 
   private onMenuItemClick(e: React.MouseEvent<HTMLAnchorElement>) {
-    // tslint:disable-next-line:no-console
-    console.log(e.currentTarget.id);
     this.props.selectHeadlineType(e.currentTarget.id);
   }
 }

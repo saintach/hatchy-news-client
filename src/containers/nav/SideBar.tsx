@@ -3,7 +3,7 @@ import {
 } from "@blueprintjs/core";
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Sidebar from 'react-sidebar';
 import { AnyAction, bindActionCreators, compose, Dispatch } from 'redux';
 import { ISelectHeadlineType, selectHeadlineType} from '../../actions-reducers/selected';
@@ -11,9 +11,10 @@ import { ISelected } from "../../types/ISelected";
 import { IState } from "../../types/IState";
 interface ILocalState {
   sidebarOpen: boolean;
+  selectedRoute: string;
 }
 
-interface ILocalProps {
+interface ILocalProps extends RouteComponentProps<ILocalProps>{
   selected: ISelected;
   selectHeadlineType: ISelectHeadlineType;
 }
@@ -21,25 +22,26 @@ class SideBar extends React.Component<ILocalProps, ILocalState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      sidebarOpen: true
+      selectedRoute: props.location.pathname === '/sources' ? 'sources' : 'top',
+      sidebarOpen: true,
     };
     this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
     this.onMenuItemClick = this.onMenuItemClick.bind(this);
   }
 
   public render() {
-    const { selected } = this.props;
+    const { selectedRoute } = this.state;
     return (
         <Sidebar
           sidebar={
             <Menu>
               <MenuDivider title="Headlines"/>
-              <MenuItem id="top" text="Top" icon="star" active={selected.headlineType === 'top'} onClick={this.onMenuItemClick} />
-              <MenuItem id="everything" text="Everything" icon="list-detail-view" active={selected.headlineType === 'everything'} onClick={this.onMenuItemClick} />
-              <MenuItem id="yours" text="Yours" icon="book" active={selected.headlineType === 'yours'} onClick={this.onMenuItemClick} />
+              <MenuItem id="top" text="Top" icon="star" active={selectedRoute === 'top'} onClick={this.onMenuItemClick} />
+              <MenuItem id="everything" text="Everything" icon="list-detail-view" active={selectedRoute === 'everything'} onClick={this.onMenuItemClick} />
+              <MenuItem id="yours" text="Yours" icon="book" active={selectedRoute === 'yours'} onClick={this.onMenuItemClick} />
               <MenuDivider title="Your Sources"/>
-              <MenuItem text="TechCrunch" icon={<img height="16px" src="https://seeklogo.com/images/T/techcrunch-logo-5E626AD86C-seeklogo.com.gif"/>}/>
-              <MenuItem text="Add" icon="insert" href="/sources"/>
+              <MenuItem text="TechCrunch" icon={<img height="16px" src="https://icon-locator.herokuapp.com/icon?url=techcrunch.com&size=70..120..200"/>}/>
+              <MenuItem id="sources" text="Add" icon="insert" active={selectedRoute === 'sources'} onClick={this.onMenuItemClick} />
               <MenuDivider />
               <MenuItem icon="cog" text="Settings" />
               <MenuDivider />
@@ -64,7 +66,16 @@ class SideBar extends React.Component<ILocalProps, ILocalState> {
   }
 
   private onMenuItemClick(e: React.MouseEvent<HTMLAnchorElement>) {
-    this.props.selectHeadlineType(e.currentTarget.id);
+    const id = e.currentTarget.id;
+    this.setState({
+      selectedRoute: id
+    })
+    if (id !== 'sources') {
+      this.props.selectHeadlineType(e.currentTarget.id);
+      this.props.history.push('/');
+    } else {
+      this.props.history.push('/sources')
+    }
   }
 }
 

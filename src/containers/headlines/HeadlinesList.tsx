@@ -55,7 +55,10 @@ class SideBar extends React.Component<ILocalProps, any> {
     }
 
     if (articlesToShow.length) {
-      return <div>
+      return <div style={{
+          height: '100vh',
+          overflow: 'scroll',
+        }}>
         { this.renderFilters() }
         {
           articlesToShow.map((article, index) => (

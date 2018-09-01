@@ -16,7 +16,7 @@ interface ILocalProps extends IArticle {
 
 class HeadlineCard extends React.Component<ILocalProps, any> {
   public render() {
-    const {author, title, url, publishedAt, selected} = this.props;
+    const {author, title, url, publishedAt, selected, source} = this.props;
     const readableDate = new Date(publishedAt);
     return (
       <Card id={url}
@@ -26,7 +26,7 @@ class HeadlineCard extends React.Component<ILocalProps, any> {
           <Box><H5><a href={url}>{title}</a></H5></Box>
           <Box><Button className={Classes.MINIMAL} icon="bookmark"/></Box>
         </Flex>
-        <p>{readableDate.toLocaleString()} by {author}</p>
+        <p>{source.name} | {readableDate.toLocaleString()} {author && `by ${author}`}</p>
       </Card>
     );
   }

@@ -5,8 +5,11 @@ import { connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { AnyAction, bindActionCreators, compose, Dispatch } from 'redux';
 import { ILoadEverything, loadEverything } from '../../actions-reducers/everything';
-import { ISelectArticleUrl, selectArticleUrl } from '../../actions-reducers/selected';
+import { ISelectArticleUrl, ISelectEverythingParams,
+ISelectTopHeadlinesParams, selectArticleUrl,
+selectEverythingParams, selectTopHeadlinesParams } from '../../actions-reducers/selected';
 import { ILoadTopHeadlines, loadTopHeadlines } from '../../actions-reducers/topHeadlines';
+import EverythingFilters from '../../components/filters/EverythingFilters';
 import TopHeadlinesFilters from '../../components/filters/TopHeadlinesFilters';
 import HeadlineCard from '../../components/headlines/HeadlineCard';
 import { IArticle } from '../../types/IArticle';
@@ -21,6 +24,8 @@ interface ILocalProps {
   isFetchingEverything: boolean;
   isFetchingTop: boolean;
   selectArticleUrl: ISelectArticleUrl;
+  selectEverythingParams: ISelectEverythingParams;
+  selectTopHeadlinesParams: ISelectTopHeadlinesParams;
   selected: ISelected;
 }
 
@@ -29,6 +34,9 @@ class SideBar extends React.Component<ILocalProps, any> {
     super(props);
     this.onClickArticle = this.onClickArticle.bind(this);
     this.loadSelectedType = this.loadSelectedType.bind(this);
+    this.onTopHeadlinesSearch = this.onTopHeadlinesSearch.bind(this);
+    this.onEverythingSearch = this.onEverythingSearch.bind(this);
+    this.renderFilters = this.renderFilters.bind(this);
   }
   public render() {
     const { isFetchingEverything, isFetchingTop, articles, everything, selected } = this.props;
@@ -48,7 +56,7 @@ class SideBar extends React.Component<ILocalProps, any> {
 
     if (articlesToShow.length) {
       return <div>
-        <TopHeadlinesFilters />
+        { this.renderFilters() }
         {
           articlesToShow.map((article, index) => (
             <HeadlineCard
@@ -62,19 +70,26 @@ class SideBar extends React.Component<ILocalProps, any> {
     }
 
     return (
-        <div><p>No results this time.</p></div>
+        <div>
+          { this.renderFilters() }
+          <p>No results this time.</p>
+        </div>
     );
   }
   public componentDidMount() {
-    this.props.loadTopHeadlines([
-      {name: 'category', value: 'general'},
-      {name: 'country', value: 'us'}
-    ]);
+    this.props.loadTopHeadlines(this.getNameVal(this.props.selected.topHeadlinesParams));
   }
   public componentWillReceiveProps(nextProps: ILocalProps) {
     // Load new type when selected
     if (nextProps.selected.headlineType !== this.props.selected.headlineType) {
-      this.loadSelectedType(nextProps.selected.headlineType);
+      this.loadSelectedType(nextProps.selected.headlineType, nextProps.selected);
+    }
+
+    // Load again when selected filters changed
+    if (!isEqual(nextProps.selected.everythingParams,this.props.selected.everythingParams)) {
+      this.loadSelectedType(nextProps.selected.headlineType, nextProps.selected);
+    } else if (!isEqual(nextProps.selected.topHeadlinesParams,this.props.selected.topHeadlinesParams)) {
+      this.loadSelectedType(nextProps.selected.headlineType, nextProps.selected);
     }
 
     const isTopNews = nextProps.selected.headlineType === 'top' &&
@@ -89,19 +104,31 @@ class SideBar extends React.Component<ILocalProps, any> {
       this.props.selectArticleUrl(nextProps.everything[0].url);
     }
   }
-  private loadSelectedType(type: string) {
+  private renderFilters() {
+    const {selected} = this.props
+    switch(selected.headlineType) {
+      case 'top': return (
+        <TopHeadlinesFilters
+          selected={selected.topHeadlinesParams}
+          onSearch={this.onTopHeadlinesSearch}
+        />
+      );
+      case 'everything': return (
+        <EverythingFilters
+          selected={selected.everythingParams}
+          onSearch={this.onEverythingSearch}
+        />
+      );
+      default: return;
+    }
+  }
+  private loadSelectedType(type: string, selected: ISelected) {
     switch(type) {
       case 'top':
-        this.props.loadTopHeadlines([
-          {name: 'category', value: 'general'},
-          {name: 'country', value: 'us'}
-        ]);
+        this.props.loadTopHeadlines(this.getNameVal(selected.topHeadlinesParams));
         return;
       case 'everything':
-        this.props.loadEverything([
-          {name: 'language', value: 'en'},
-          {name: 'q', value: 'technology'}
-        ]);
+        this.props.loadEverything(this.getNameVal(selected.everythingParams));
         return;
       case 'yours':
         return;
@@ -110,6 +137,15 @@ class SideBar extends React.Component<ILocalProps, any> {
   }
   private onClickArticle(e: React.MouseEvent<HTMLElement>) {
     this.props.selectArticleUrl(e.currentTarget.id);
+  }
+  private getNameVal(items: any) {
+    return Object.keys(items).map((name) => ({name, value: items[name]}))
+  }
+  private onEverythingSearch(searchObj: object) {
+    this.props.selectEverythingParams(searchObj);
+  }
+  private onTopHeadlinesSearch(searchObj: object) {
+    this.props.selectTopHeadlinesParams(searchObj);
   }
 }
 
@@ -123,7 +159,7 @@ const mapStateToProps = (state: IState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
     bindActionCreators(
-    { loadTopHeadlines, loadEverything, selectArticleUrl },
+    { loadTopHeadlines, loadEverything, selectArticleUrl, selectEverythingParams, selectTopHeadlinesParams },
     dispatch,
 );
 

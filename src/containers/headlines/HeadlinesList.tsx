@@ -7,6 +7,7 @@ import { AnyAction, bindActionCreators, compose, Dispatch } from 'redux';
 import { ILoadEverything, loadEverything } from '../../actions-reducers/everything';
 import { ISelectArticleUrl, selectArticleUrl } from '../../actions-reducers/selected';
 import { ILoadTopHeadlines, loadTopHeadlines } from '../../actions-reducers/topHeadlines';
+import TopHeadlinesFilters from '../../components/filters/TopHeadlinesFilters';
 import HeadlineCard from '../../components/headlines/HeadlineCard';
 import { IArticle } from '../../types/IArticle';
 import { ISelected } from '../../types/ISelected';
@@ -46,13 +47,18 @@ class SideBar extends React.Component<ILocalProps, any> {
     }
 
     if (articlesToShow.length) {
-      return articlesToShow.map((article, index) => (
-        <HeadlineCard
-          key={index}
-          onClick={this.onClickArticle}
-          selected={article.url === selected.articleUrl}
-          {...article} />
-      ))
+      return <div>
+        <TopHeadlinesFilters />
+        {
+          articlesToShow.map((article, index) => (
+            <HeadlineCard
+              key={index}
+              onClick={this.onClickArticle}
+              selected={article.url === selected.articleUrl}
+              {...article} />
+          ))
+        }
+      </div>
     }
 
     return (

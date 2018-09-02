@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 const IFrame = (props: any) => (
-  <iframe {...props} />
+  <iframe id="reader" {...props} />
 );
 
 interface ILocalProps {

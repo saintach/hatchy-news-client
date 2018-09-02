@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+// import Readability from 'readability';
 import { AnyAction, bindActionCreators, compose, Dispatch } from 'redux';
 import NewsReader from '../../components/reader/NewsReader';
 import { ISelected } from "../../types/ISelected";

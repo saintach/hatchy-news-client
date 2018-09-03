@@ -70,6 +70,7 @@ export default class Request
     method:       RequestMethod,
     path:         string,
     queryParams?: IQueryParam[],
+    isFullPath?: boolean,
     // tslint:disable-next-line:no-any
     body?:        any,
     isPlainText?: boolean
@@ -77,7 +78,7 @@ export default class Request
   {
     const queryString = this.getQueryString(queryParams);
     const fullPath    = `${this.basePath}${path}`;
-    const endpoint    = `${fullPath}${queryString}`;
+    const endpoint    = isFullPath ? `${path}${queryString}` : `${fullPath}${queryString}`;
 
     const fetchOptions: IFetchOptions = {
       headers: this.getDefaultHeaders(method),

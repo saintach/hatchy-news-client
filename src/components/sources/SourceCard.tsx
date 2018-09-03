@@ -8,7 +8,7 @@ import {
 import * as React from 'react';
 import { Box, Flex  } from 'reflexbox';
 import { ISource } from '../../types/ISource';
-
+import constants from "../../utils/constants";
 interface ILocalProps extends ISource {
   bookmarked?: boolean;
   onClickAdd?: (e: React.MouseEvent<HTMLElement>) => void;
@@ -18,7 +18,7 @@ class SourceCard extends React.Component<ILocalProps, any> {
   public render() {
     const {id, name, description, url, category, language, country} = this.props;
     return (
-      <Box w={1/5} p={1}>
+      <Box w={1/4} p={1}>
         <Card id={id}
           interactive={true}
           className={`source-card__container ${Classes.ELEVATION_1}`}>
@@ -29,9 +29,9 @@ class SourceCard extends React.Component<ILocalProps, any> {
           <H5><a href={url}>{name}</a></H5>
           <p className="desc">{description}</p>
           <Flex justify="space-evenly">
-            <Tag interactive={true}>{category}</Tag>
-            <Tag interactive={true}>{language}</Tag>
-            <Tag interactive={true}>{country}</Tag>
+            <Tag interactive={true}>{constants.category[category]}</Tag>
+            <Tag interactive={true}>{constants.language[language]}</Tag>
+            <Tag interactive={true}>{constants.country[country]}</Tag>
           </Flex>
         </Card>
       </Box>

@@ -1,6 +1,6 @@
 import { Button, Classes } from '@blueprintjs/core';
 import * as React from 'react';
-import { Flex } from 'reflexbox';
+import { Box, Flex } from 'reflexbox';
 
 const IFrame = (props: any) => (
   <iframe id="reader" {...props} />
@@ -31,10 +31,14 @@ class NewsReader extends React.Component<ILocalProps, any> {
     const { isReaderView } = this.state;
     return (
       <div className="news-reader__container">
-        <Flex p={1} justify="center">
-            <Button className={Classes.MINIMAL} active={isReaderView} onClick={this.onReaderViewClick}>Reader's View</Button>
-            <Button className={Classes.MINIMAL} active={!isReaderView} onClick={this.onOriginalViewClick}>Original View</Button>
+        <Flex p={1} justify="space-between">
+          <Box>
+            <Button className={Classes.MINIMAL} active={isReaderView} icon="align-justify" onClick={this.onReaderViewClick}>Reader's View</Button>
+            <Button className={Classes.MINIMAL} active={!isReaderView} icon="desktop" onClick={this.onOriginalViewClick}>Original View</Button>
+          </Box>
+          <Button className={Classes.MINIMAL} icon="bookmark" />
         </Flex>
+        <hr/>
         {this.renderView()}
       </div>
     );

@@ -55,11 +55,13 @@ class SideBar extends React.Component<ILocalProps, any> {
     }
 
     if (articlesToShow.length) {
-      return <div style={{
+      return <div>
+        { this.renderFilters() }
+        <hr />
+        <div style={{
           height: '100vh',
           overflow: 'scroll',
         }}>
-        { this.renderFilters() }
         {
           articlesToShow.map((article, index) => (
             <HeadlineCard
@@ -69,6 +71,7 @@ class SideBar extends React.Component<ILocalProps, any> {
               {...article} />
           ))
         }
+        </div>
       </div>
     }
 

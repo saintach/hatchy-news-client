@@ -10,5 +10,6 @@ export interface ISelected {
   everythingParams: {
     q: string;
     language: string;
-  }
+  },
+  currentPage: number;
 }

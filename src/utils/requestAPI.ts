@@ -104,9 +104,9 @@ export default class Request
     });
   }
 
-  private static basePath: string = process.env.REACT_APP_BASE_PATH || 'https://newsapi.org/v2/';
+  private static basePath: string = process.env.REACT_APP_NEWS_ORG_API || '';
 
-  private static apiKey: string = process.env.NEWS_API_API_KEY || '3b1ac44555a649d4845b0cbae66d1ea4';
+  private static apiKey: string = process.env.REACT_APP_NEWS_ORG_API_TOKEN || '';
 
   private static getQueryString(queryParams?: IQueryParam[]): string
   {

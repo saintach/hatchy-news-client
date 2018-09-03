@@ -66,7 +66,7 @@ export interface ILoadReadableArticle
 
 export const loadReadableArticle = (queryParams: IQueryParam[]) => {
   return {
-    callAPI: () => Request.send(RequestMethod.GET, `http://localhost:3001/readability`, queryParams, true),
+    callAPI: () => Request.send(RequestMethod.GET, `${process.env.REACT_APP_READABILITY_API}readability`, queryParams, true),
     payload: { queryParams },
     types: [GET_ARTICLE_READER_REQUEST, GET_ARTICLE_READER_SUCCESS, GET_ARTICLE_READER_FAILURE],
   };

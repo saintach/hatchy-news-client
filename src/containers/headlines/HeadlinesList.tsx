@@ -1,12 +1,16 @@
 // tslint:disable-next-line:no-var-requires
 const isEqual = require('lodash.isequal');
+import { Button, Classes } from '@blueprintjs/core';
 import * as React from 'react';
 import { connect} from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { AnyAction, bindActionCreators, compose, Dispatch } from 'redux';
+import { Flex } from 'reflexbox';
 import { ILoadEverything, loadEverything } from '../../actions-reducers/everything';
-import { ISelectArticleUrl, ISelectEverythingParams,
-ISelectTopHeadlinesParams, selectArticleUrl,
+import { IResetCurrentPage, ISelectArticleUrl,
+ISelectCurrentPage, ISelectEverythingParams,
+ISelectTopHeadlinesParams, resetCurrentPage,
+selectArticleUrl, selectCurrentPage,
 selectEverythingParams, selectTopHeadlinesParams } from '../../actions-reducers/selected';
 import { ILoadTopHeadlines, loadTopHeadlines } from '../../actions-reducers/topHeadlines';
 import EverythingFilters from '../../components/filters/EverythingFilters';
@@ -26,6 +30,8 @@ interface ILocalProps {
   selectArticleUrl: ISelectArticleUrl;
   selectEverythingParams: ISelectEverythingParams;
   selectTopHeadlinesParams: ISelectTopHeadlinesParams;
+  selectCurrentPage: ISelectCurrentPage;
+  resetCurrentPage: IResetCurrentPage;
   selected: ISelected;
 }
 
@@ -36,7 +42,10 @@ class SideBar extends React.Component<ILocalProps, any> {
     this.loadSelectedType = this.loadSelectedType.bind(this);
     this.onTopHeadlinesSearch = this.onTopHeadlinesSearch.bind(this);
     this.onEverythingSearch = this.onEverythingSearch.bind(this);
+    this.onNextClick = this.onNextClick.bind(this);
+    this.onPrevClick = this.onPrevClick.bind(this);
     this.renderFilters = this.renderFilters.bind(this);
+    this.renderPagination = this.renderPagination.bind(this);
   }
   public render() {
     const { isFetchingEverything, isFetchingTop, articles, everything, selected } = this.props;
@@ -71,6 +80,9 @@ class SideBar extends React.Component<ILocalProps, any> {
               {...article} />
           ))
         }
+        {
+          this.renderPagination()
+        }
         </div>
       </div>
     }
@@ -78,29 +90,33 @@ class SideBar extends React.Component<ILocalProps, any> {
     return (
         <div>
           { this.renderFilters() }
-          <p>No results this time.</p>
+          <hr />
+          <p>Sorry we couldn't seem to find what you were looking for.</p>
+          <hr />
+          { this.renderPagination() }
         </div>
     );
   }
   public componentDidMount() {
-    this.props.loadTopHeadlines(this.getNameVal(this.props.selected.topHeadlinesParams));
+    this.props.loadTopHeadlines(
+      this.getNameVal({page: this.props.selected.currentPage, ...this.props.selected.topHeadlinesParams})
+    );
   }
   public componentWillReceiveProps(nextProps: ILocalProps) {
-    // Load new type when selected
-    if (nextProps.selected.headlineType !== this.props.selected.headlineType) {
-      this.loadSelectedType(nextProps.selected.headlineType, nextProps.selected);
+    const nSelected = nextProps.selected;
+    const tSelected = this.props.selected;
+
+    if (nSelected.headlineType !== tSelected.headlineType || // when new type is selected
+      !isEqual(nSelected.everythingParams,tSelected.everythingParams) || // when filters change
+      !isEqual(nSelected.topHeadlinesParams,tSelected.topHeadlinesParams) || // when filters change
+      nSelected.currentPage !== tSelected.currentPage // when pagination changes
+    ) {
+      this.loadSelectedType(nSelected.headlineType, nSelected);
     }
 
-    // Load again when selected filters changed
-    if (!isEqual(nextProps.selected.everythingParams,this.props.selected.everythingParams)) {
-      this.loadSelectedType(nextProps.selected.headlineType, nextProps.selected);
-    } else if (!isEqual(nextProps.selected.topHeadlinesParams,this.props.selected.topHeadlinesParams)) {
-      this.loadSelectedType(nextProps.selected.headlineType, nextProps.selected);
-    }
-
-    const isTopNews = nextProps.selected.headlineType === 'top' &&
+    const isTopNews = nSelected.headlineType === 'top' &&
     !isEqual(nextProps.articles, this.props.articles) && nextProps.articles.length;
-    const isEverything = nextProps.selected.headlineType === 'everything' &&
+    const isEverything = nSelected.headlineType === 'everything' &&
     !isEqual(nextProps.everything, this.props.everything) && nextProps.everything.length;
     // Select the first url
     if (isTopNews) {
@@ -128,13 +144,29 @@ class SideBar extends React.Component<ILocalProps, any> {
       default: return;
     }
   }
+  private renderPagination() {
+    return (
+      <Flex p={1} justify="space-between">
+        <Button className={Classes.MINIMAL} icon="chevron-left" onClick={this.onPrevClick}>Prev</Button>
+        <Button className={Classes.MINIMAL}>Page {this.props.selected.currentPage}</Button>
+        <Button className={Classes.MINIMAL} rightIcon="chevron-right" onClick={this.onNextClick}>Next</Button>
+      </Flex>
+    )
+  }
+  private onNextClick() {
+    this.props.selectCurrentPage(this.props.selected.currentPage + 1)
+  }
+  private onPrevClick() {
+    const setTo = this.props.selected.currentPage <= 2 ? 1 : this.props.selected.currentPage - 1;
+    this.props.selectCurrentPage(setTo)
+  }
   private loadSelectedType(type: string, selected: ISelected) {
     switch(type) {
       case 'top':
-        this.props.loadTopHeadlines(this.getNameVal(selected.topHeadlinesParams));
+        this.props.loadTopHeadlines(this.getNameVal({page: selected.currentPage, ...selected.topHeadlinesParams}));
         return;
       case 'everything':
-        this.props.loadEverything(this.getNameVal(selected.everythingParams));
+        this.props.loadEverything(this.getNameVal({page: selected.currentPage, ...selected.everythingParams}));
         return;
       case 'yours':
         return;
@@ -165,7 +197,9 @@ const mapStateToProps = (state: IState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) =>
     bindActionCreators(
-    { loadTopHeadlines, loadEverything, selectArticleUrl, selectEverythingParams, selectTopHeadlinesParams },
+    { loadEverything, loadTopHeadlines, resetCurrentPage, selectArticleUrl,
+      selectCurrentPage, selectEverythingParams,
+      selectTopHeadlinesParams },
     dispatch,
 );
 

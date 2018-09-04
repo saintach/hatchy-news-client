@@ -182,7 +182,6 @@ class SideBar extends React.Component<ILocalProps, any> {
         this.props.loadTopHeadlines(
           this.getNameVal({
             page: selected.currentPage,
-            sources: selected.sourceId,
             ...selected.topHeadlinesParams,
           }
         ));

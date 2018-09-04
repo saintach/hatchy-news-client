@@ -29,8 +29,9 @@ class App extends React.Component {
       <div className="App">
         <NavBar />
         <SideBar>
-          <Route path="/" exact={true} component={Default} />
+          <Route path="/sources/:sourceId" exact={true} component={Default} />
           <Route path="/sources" exact={true} component={Sources} />
+          <Route path="/" exact={true} component={Default} />
         </SideBar>
       </div>
     );

@@ -6,6 +6,8 @@ import {
   SELECT_CURRENT_PAGE,
   SELECT_EVERYTHING_PARAMS,
   SELECT_HEADLINE,
+  SELECT_SOURCE,
+  SELECT_SOURCE_AND_HEADLINE,
   SELECT_TOP_HEADLINES_PARAMS
 } from './constants';
 
@@ -41,6 +43,19 @@ const Selected = (state = initialState, action: IAction) =>
         currentPage: 1,
         headlineType: action.response
       };
+    case SELECT_SOURCE:
+      return {
+        ...state,
+        currentPage: 1,
+        sourceId: action.response
+      };
+    case SELECT_SOURCE_AND_HEADLINE:
+      return {
+        ...state,
+        currentPage: 1,
+        headlineType: action.response.headlineType,
+        sourceId: action.response.sourceId,
+      }
     case SELECT_EVERYTHING_PARAMS:
       return {
         ...state,
@@ -83,6 +98,42 @@ export const selectHeadlineType = (headlineType: string) => {
   return {
     response: headlineType,
     type: SELECT_HEADLINE,
+  };
+};
+
+export interface ISelectSource
+{
+  // tslint:disable-next-line:callable-types
+  (s: string):
+  {
+    types: string,
+    response: string
+  };
+}
+
+
+export const selectSource = (source: string) => {
+  return {
+    response: source,
+    type: SELECT_SOURCE,
+  };
+};
+
+export interface ISelectSourceAndHeadline
+{
+  // tslint:disable-next-line:callable-types
+  (sourceId: string, headlineType: string):
+  {
+    types: string,
+    response: {sourceId: string; headlineType: string;}
+  };
+}
+
+
+export const selectSourceAndHeadline = (sourceId: string, headlineType: string) => {
+  return {
+    response: { sourceId, headlineType },
+    type: SELECT_SOURCE_AND_HEADLINE,
   };
 };
 

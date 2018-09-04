@@ -11,7 +11,7 @@ import {
 const initialState: IEverything =
 {
   articles: [],
-  isFetching: true,
+  isFetching: false,
   status: 'ok',
   totalResults: 0,
 };

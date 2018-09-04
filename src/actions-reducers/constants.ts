@@ -29,6 +29,12 @@ export type GET_ARTICLE_READER_FAILURE   = typeof GET_ARTICLE_READER_FAILURE;
 export const SELECT_HEADLINE             = 'SELECT_HEADLINE';
 export type SELECT_HEADLINE              = typeof SELECT_HEADLINE;
 
+export const SELECT_SOURCE               = 'SELECT_SOURCE';
+export type SELECT_SOURCE                = typeof SELECT_SOURCE;
+
+export const SELECT_SOURCE_AND_HEADLINE  = 'SELECT_SOURCE_AND_HEADLINE';
+export type SELECT_SOURCE_AND_HEADLINE   = typeof SELECT_SOURCE_AND_HEADLINE;
+
 export const SELECT_ARTICLE_URL          = 'SELECT_ARTICLE_URL';
 export type SELECT_ARTICLE_URL           = typeof SELECT_ARTICLE_URL;
 

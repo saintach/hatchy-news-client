@@ -16,7 +16,10 @@ import {
 // ===== Reducers =====
 const initialState: IAuth =
 {
-  username: ''
+  id: '',
+  isFetching: false,
+  token: '',
+  username: '',
 };
 
 const auth = (state = initialState, action: IAction) =>
@@ -24,14 +27,37 @@ const auth = (state = initialState, action: IAction) =>
   switch (action.type) {
 
     case CREATE_USER_REQUEST:
-    case CREATE_USER_SUCCESS:
-    case CREATE_USER_FAILURE:
-    case UPDATE_USER_REQUEST:
-    case UPDATE_USER_SUCCESS:
-    case UPDATE_USER_FAILURE:
     case GET_USER_AUTH_REQUEST:
+    case UPDATE_USER_REQUEST:
+      return {
+        ...state,
+        isFetching: true
+      };
+
+    case CREATE_USER_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        ...action.response.data,
+      };
     case GET_USER_AUTH_SUCCESS:
+      return {
+        ...state,
+        isFetching: false,
+        ...action.response,
+      };
+    case UPDATE_USER_SUCCESS:
+      // TO-ADD:
+
     case GET_USER_AUTH_FAILURE:
+    case CREATE_USER_FAILURE:
+    case UPDATE_USER_FAILURE:
+      return {
+        error: action.error,
+        ...state,
+        isFetching: false,
+      };
+
     default:
       return state;
   }
@@ -54,9 +80,9 @@ export interface ICreateUser
 
 export const createUser = (body: object) => {
   return {
-    callAPI: () => Request.send(RequestMethod.POST, `/user/create`, undefined, false, body),
+    callAPI: () => Request.send(RequestMethod.POST, `${process.env.REACT_APP_USER_API}api/users/create`, undefined, true, body),
     payload: { },
-    types: [CREATE_USER_SUCCESS, CREATE_USER_FAILURE, CREATE_USER_REQUEST],
+    types: [CREATE_USER_REQUEST, CREATE_USER_SUCCESS, CREATE_USER_FAILURE],
   };
 };
 
@@ -73,8 +99,8 @@ export interface ISignin
 
 export const signin = (body: object) => {
   return {
-    callAPI: () => Request.send(RequestMethod.POST, `/user/signin`, undefined, false, body),
+    callAPI: () => Request.send(RequestMethod.POST, `${process.env.REACT_APP_USER_API}api/users/login`, undefined, true, body),
     payload: { },
-    types: [GET_USER_AUTH_SUCCESS, GET_USER_AUTH_FAILURE, GET_USER_AUTH_REQUEST],
+    types: [GET_USER_AUTH_REQUEST, GET_USER_AUTH_SUCCESS, GET_USER_AUTH_FAILURE],
   };
 };

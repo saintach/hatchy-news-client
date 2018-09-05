@@ -16,7 +16,9 @@ class Signin extends React.Component<ILocalProps, any> {
       password: '',
       username: '',
     }
-    this.onSigupClick = this.onSigupClick.bind(this)
+    this.onSiginClick = this.onSiginClick.bind(this)
+    this.onUsernameChange = this.onUsernameChange.bind(this)
+    this.onPasswordChange = this.onPasswordChange.bind(this)
   }
   public render() {
     const {username, password} = this.state;
@@ -27,6 +29,7 @@ class Signin extends React.Component<ILocalProps, any> {
           leftIcon="user"
           type="text"
           value={username}
+          onChange={this.onUsernameChange}
         />
         <br />
         <InputGroup
@@ -34,13 +37,24 @@ class Signin extends React.Component<ILocalProps, any> {
           leftIcon="lock"
           type="password"
           value={password}
+          onChange={this.onPasswordChange}
         />
         <br />
-        <Button intent="primary" onClick={this.onSigupClick}>Signin</Button>
+        <Button intent="primary" onClick={this.onSiginClick}>Signin</Button>
       </Flex>
     );
   }
-  private onSigupClick() {
+  private onUsernameChange(e: React.FormEvent<HTMLInputElement>) {
+    this.setState({
+      username: e.currentTarget.value
+    })
+  }
+  private onPasswordChange(e: React.FormEvent<HTMLInputElement>) {
+    this.setState({
+      password: e.currentTarget.value
+    })
+  }
+  private onSiginClick() {
     this.props.onSigninClick({
       password: this.state.password,
       username: this.state.username,

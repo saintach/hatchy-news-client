@@ -146,6 +146,7 @@ export default class Request
 
       case 200:
       case 201:
+      case 202:
         return (isPlainText ? response.text() : response.json());
 
       // BAD REQUEST

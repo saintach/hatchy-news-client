@@ -1,5 +1,5 @@
 import { IAction } from '../../types/IRedux';
-import { IAuth } from '../../types/user/IAuth';
+// import { IAuth } from '../../types/user/IAuth';
 import Request, { IQueryParam, RequestMethod } from '../../utils/requestAPI';
 import {
   GET_USER_SOURCES_FAILURE,
@@ -11,7 +11,7 @@ import {
 } from '../constants';
 
 // ===== Reducers =====
-const initialState: IAuth =
+const initialState: any =
 {
   username: ''
 };
